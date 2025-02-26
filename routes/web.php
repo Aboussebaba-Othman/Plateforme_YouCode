@@ -18,3 +18,10 @@ Route::middleware(['auth', 'verified', 'role:candidate'])->group(function () {
     Route::get('/candidate/documents', [CandidateController::class, 'showDocumentForm'])->name('candidate.documents');
     Route::post('/candidate/documents', [CandidateController::class, 'submitDocuments'])->name('candidate.submit.documents');
 });
+Route::get('/dev/verify-email', function () {
+    if (app()->environment('local')) {
+        auth()->user()->markEmailAsVerified();
+        return redirect()->route('home')->with('success', 'Email verified!');
+    }
+    return redirect()->route('home');
+})->middleware('auth')->name('dev.verify-email');
