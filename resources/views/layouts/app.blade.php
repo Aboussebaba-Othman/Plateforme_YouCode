@@ -12,7 +12,9 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 
 
     <!-- Scripts -->

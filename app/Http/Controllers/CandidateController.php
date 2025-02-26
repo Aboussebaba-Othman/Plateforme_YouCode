@@ -22,10 +22,10 @@ class CandidateController extends Controller
     }
 
     public function showDocumentForm()
-    {
-        $candidate = Auth::user()->candidate;
-        return view('candidate.documents', compact('candidate'));
-    }
+{
+    $candidate = Auth::user()->candidate; 
+    return view('candidate.documents', compact('candidate'));
+}
 
     public function submitDocuments(CandidateInfoRequest $request)
     {
