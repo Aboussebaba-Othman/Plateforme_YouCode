@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
 {
-    Schema::create('questions', function (Blueprint $table) {
+    Schema::create('quiz_attempts', function (Blueprint $table) {
         $table->id();
+        $table->foreignId('candidate_id')->constrained();
         $table->foreignId('quiz_id')->constrained();
-        $table->text('content');
-        $table->integer('points')->default(1);
-        $table->enum('type', ['single', 'multiple'])->default('single');
+        $table->timestamp('started_at');
+        $table->timestamp('completed_at')->nullable();
+        $table->integer('score')->nullable();
+        $table->enum('status', ['started', 'completed', 'passed', 'failed'])->default('started');
+        $table->json('answers')->nullable()->comment('JSON of question_id => answer_id pairs');
         $table->timestamps();
         $table->softDeletes();
     });
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('quiz_attempts');
     }
 };

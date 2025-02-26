@@ -12,12 +12,16 @@ return new class extends Migration
      * @return void
      */
     public function up()
-    {
-        Schema::create('answers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('answers', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('question_id')->constrained();
+        $table->text('content');
+        $table->boolean('is_correct');
+        $table->timestamps();
+        $table->softDeletes();
+    });
+}
 
     /**
      * Reverse the migrations.
