@@ -18,8 +18,8 @@ class QuizAttempt extends Model
         'score',
         'status',
         'answers',
+        'current_question',
     ];
-
     protected $casts = [
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
@@ -39,7 +39,7 @@ class QuizAttempt extends Model
     public function isTimedOut()
     {
         if (!$this->completed_at && $this->started_at) {
-            $timeLimit = $this->quiz->time_limit * 60; // convert to seconds
+            $timeLimit = $this->quiz->time_limit * 60; 
             return now()->diffInSeconds($this->started_at) > $timeLimit;
         }
         
@@ -52,10 +52,11 @@ class QuizAttempt extends Model
             return 0;
         }
         
-        $timeLimit = $this->quiz->time_limit * 60; // in seconds
+        $timeLimit = $this->quiz->time_limit * 60; 
         $elapsed = now()->diffInSeconds($this->started_at);
         $remaining = $timeLimit - $elapsed;
         
         return max(0, $remaining);
     }
+    
 }

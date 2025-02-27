@@ -15,7 +15,7 @@
                             @if ($attempt->status === 'passed')
                                 Congratulations! You passed the quiz.
                             @else
-                                Sorry! You did not pass the quiz.
+                                Sorry! You did not pass the quiz. You cannot retake this assessment.
                             @endif
                         </h4>
                     </div>
@@ -32,11 +32,11 @@
                     
                     @if ($attempt->status === 'passed')
                         <p>You have successfully completed the quiz requirement. Your application is now being processed for the next stage.</p>
-                        <a href="{{ route('candidate.profile') }}" class="btn btn-primary">Return to Profile</a>
                     @else
-                        <p>You can retake the quiz to improve your score.</p>
-                        <a href="{{ route('candidate.quiz.index') }}" class="btn btn-primary">Try Again</a>
+                        <p>Unfortunately, you did not meet the passing requirements for this assessment.</p>
                     @endif
+                    
+                    <a href="{{ route('candidate.profile') }}" class="btn btn-primary">Return to Profile</a>
                 </div>
             </div>
         </div>

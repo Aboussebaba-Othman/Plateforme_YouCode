@@ -22,6 +22,7 @@ return new class extends Migration
         $table->integer('score')->nullable();
         $table->enum('status', ['started', 'completed', 'passed', 'failed'])->default('started');
         $table->json('answers')->nullable()->comment('JSON of question_id => answer_id pairs');
+        $table->integer('current_question')->default(0); 
         $table->timestamps();
         $table->softDeletes();
     });
