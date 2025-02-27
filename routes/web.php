@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     return view('welcome');
