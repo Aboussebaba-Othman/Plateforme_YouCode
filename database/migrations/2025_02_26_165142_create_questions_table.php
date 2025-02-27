@@ -20,6 +20,7 @@ return new class extends Migration
         $table->integer('points')->default(1);
         $table->enum('type', ['single', 'multiple'])->default('single');
         $table->timestamps();
+    
         $table->softDeletes();
     });
 }

@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\QuizManagementController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,4 +42,20 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::get('/candidates', [AdminController::class, 'candidatesList'])->name('admin.candidates');
     Route::get('/candidates/{id}', [AdminController::class, 'viewCandidate'])->name('admin.candidate.view');
     Route::post('/candidates/{id}/status', [AdminController::class, 'updateCandidateStatus'])->name('admin.candidate.update.status');
+
+    // Quiz Management Routes
+    Route::prefix('quiz')->name('admin.quiz.')->group(function () {
+        Route::get('/', [QuizManagementController::class, 'index'])->name('index');
+        Route::get('/create', [QuizManagementController::class, 'create'])->name('create');
+        Route::post('/', [QuizManagementController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [QuizManagementController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [QuizManagementController::class, 'update'])->name('update');
+        Route::delete('/{id}', [QuizManagementController::class, 'destroy'])->name('destroy');
+        
+        // Question Management
+        Route::get('/{quizId}/questions/create', [QuizManagementController::class, 'createQuestion'])->name('question.create');
+        Route::post('/{quizId}/questions', [QuizManagementController::class, 'storeQuestion'])->name('question.store');
+        Route::put('/{quizId}/questions/{question}', [QuizManagementController::class, 'updateQuestion'])->name('question.update');
+        Route::delete('/{quizId}/questions/{question}', [QuizManagementController::class, 'destroyQuestion'])->name('question.destroy');
+    });
 });
