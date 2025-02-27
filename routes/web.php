@@ -26,3 +26,11 @@ Route::get('/dev/verify-email', function () {
     }
     return redirect()->route('home');
 })->middleware('auth')->name('dev.verify-email');
+// Quiz Routes
+Route::middleware(['auth', 'verified', 'role:candidate'])->group(function () {
+    Route::get('/candidate/quiz', [QuizController::class, 'index'])->name('candidate.quiz.index');
+    Route::get('/candidate/quiz/{quiz}/start', [QuizController::class, 'startQuiz'])->name('candidate.quiz.start');
+    Route::get('/candidate/quiz/{quiz}/take', [QuizController::class, 'startQuiz'])->name('candidate.quiz.take');
+    Route::post('/candidate/quiz/attempt/{attempt}', [QuizController::class, 'submitQuiz'])->name('candidate.quiz.submit');
+    Route::get('/candidate/quiz/results/{attempt}', [QuizController::class, 'showResults'])->name('candidate.quiz.results');
+});
