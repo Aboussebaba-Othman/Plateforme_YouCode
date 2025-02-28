@@ -8,7 +8,6 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\QuizManagementController;
 
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -22,6 +21,7 @@ Route::middleware(['auth', 'verified', 'role:candidate'])->group(function () {
     Route::get('/candidate/documents', [CandidateController::class, 'showDocumentForm'])->name('candidate.documents');
     Route::post('/candidate/documents', [CandidateController::class, 'submitDocuments'])->name('candidate.submit.documents');
 });
+
 Route::get('/dev/verify-email', function () {
     if (app()->environment('local')) {
         auth()->user()->markEmailAsVerified();
@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified', 'role:candidate'])->group(function () {
     Route::post('/candidate/quiz/attempt/{attempt}/answer', [QuizController::class, 'answerQuestion'])->name('candidate.quiz.answer');
     Route::get('/candidate/quiz/results/{attempt}', [QuizController::class, 'showResults'])->name('candidate.quiz.results');
 });
+
 Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/candidates', [AdminController::class, 'candidatesList'])->name('admin.candidates');
@@ -55,7 +56,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
         // Question Management
         Route::get('/{quizId}/questions/create', [QuizManagementController::class, 'createQuestion'])->name('question.create');
         Route::post('/{quizId}/questions', [QuizManagementController::class, 'storeQuestion'])->name('question.store');
-        Route::put('/{quizId}/questions/{question}', [QuizManagementController::class, 'updateQuestion'])->name('question.update');
-        Route::delete('/{quizId}/questions/{question}', [QuizManagementController::class, 'destroyQuestion'])->name('question.destroy');
+        Route::get('/{quizId}/questions/{questionId}/edit', [QuizManagementController::class, 'editQuestion'])->name('question.edit');
+        Route::put('/{quizId}/questions/{questionId}', [QuizManagementController::class, 'updateQuestion'])->name('question.update');
+        Route::delete('/{quizId}/questions/{questionId}', [QuizManagementController::class, 'destroyQuestion'])->name('question.destroy');
     });
 });

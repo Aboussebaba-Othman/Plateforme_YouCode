@@ -17,6 +17,100 @@
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <!-- <link href="https://cdn.tailwindcss.com" rel="stylesheet"> -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4e73df;
+            --secondary-color: #f8f9fc;
+            --accent-color: #36b9cc;
+            --success-color: #1cc88a;
+            --danger-color: #e74a3b;
+        }
+        
+        body {
+            background-color: var(--secondary-color);
+            font-family: 'Nunito', sans-serif;
+        }
+        
+        .card {
+            border-radius: 0.35rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            border: none;
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #e3e6f0;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .question-header {
+            color: var(--primary-color);
+            font-weight: 700;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 15px;
+        }
+        
+        .answer-container {
+            background-color: white;
+            border-radius: 0.35rem;
+            padding: 20px;
+            margin-bottom: 10px;
+            border: 1px solid #e3e6f0;
+            position: relative;
+        }
+        
+        .correct-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .correct-indicator:checked ~ .correct-badge {
+            opacity: 1;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
+        
+        .add-answer-btn {
+            color: var(--primary-color);
+            border: 1px dashed var(--primary-color);
+            background-color: rgba(78, 115, 223, 0.1);
+            border-radius: 0.35rem;
+            padding: 10px;
+            transition: all 0.3s;
+        }
+        
+        .add-answer-btn:hover {
+            background-color: rgba(78, 115, 223, 0.2);
+        }
+    </style>
 
 
 
