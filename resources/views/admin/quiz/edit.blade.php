@@ -10,6 +10,7 @@
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.quiz.update', $quiz->id) }}" method="POST">
+                        @csrf
                         @method('PUT')
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
