@@ -1,34 +1,57 @@
-<!-- filepath: /C:/Users/Youcode/Desktop/Plateforme_YouCode/resources/views/admin/quiz/questions/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
-    <h1>Edit Question</h1>
-    <form action="{{ route('admin.quiz.question.update', ['quizId' => $quizId, 'questionId' => $question->id]) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="form-group">
-            <label for="question_text">Question</label>
-            <input type="text" name="question_text" id="question_text" class="form-control" value="{{ $question->question_text }}" required>
-        </div>
-        <div class="form-group">
-            <label for="points">Points</label>
-            <input type="number" name="points" id="points" class="form-control" value="{{ $question->points }}" required>
-        </div>
-        <div class="form-group">
-            <label for="answers">Answers</label>
-            <div id="answers">
-                @foreach($question->answers as $key => $answer)
-                    <div class="form-row mb-2">
-                        <div class="col">
-                            <input type="text" name="answers[{{ $key }}][text]" class="form-control" value="{{ $answer->text }}" required>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h4 mb-0">Edit Question</h1>
+                </div>
+                <div class="card-body">
+                    <form action="{{ route('admin.quiz.question.update', ['quizId' => $quizId, 'questionId' => $question->id]) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="content" class="form-label fw-bold">Question</label>
+                            <input type="text" name="content" id="content" class="form-control" value="{{ $question->content }}" required>
                         </div>
-                        <div class="col-auto">
-                            <input type="radio" name="correct_answer" value="{{ $key }}" {{ $answer->is_correct ? 'checked' : '' }} required>
+                        <div class="mb-3">
+                            <label for="points" class="form-label fw-bold">Points</label>
+                            <input type="number" name="points" id="points" class="form-control" value="{{ $question->points }}" required>
                         </div>
-                    </div>
-                @endforeach
+                        <div class="mb-3">
+                            <label for="type" class="form-label fw-bold">Type</label>
+                            <select name="type" id="type" class="form-select" required>
+                                <option value="single" {{ $question->type == 'single' ? 'selected' : '' }}>Single</option>
+                                <option value="multiple" {{ $question->type == 'multiple' ? 'selected' : '' }}>Multiple</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="answers" class="form-label fw-bold">Answers</label>
+                            <div id="answers">
+                                @foreach($question->answers as $key => $answer)
+                                    <div class="input-group mb-2">
+                                        <input type="text" name="answers[{{ $key }}][content]" class="form-control" value="{{ $answer->content }}" required>
+                                        <div class="input-group-text">
+                                            <input type="radio" name="correct_answer" value="{{ $key }}" {{ $answer->is_correct ? 'checked' : '' }} required>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i> Update Question
+                            </button>
+                            <a href="{{ route('admin.quiz.show', $quizId) }}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to Quiz
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-success">Update Question</button>
-    </form>
+    </div>
+</div>
 @endsection

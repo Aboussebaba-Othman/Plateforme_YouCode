@@ -39,18 +39,16 @@ class StaffManagementController extends Controller
             'send_email' => 'boolean'
         ]);
         
-        // Generate a random password
         $password = Str::random(10);
         
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($password);
-        $user->email_verified_at = now(); // Auto-verify staff accounts
+        $user->email_verified_at = now(); 
         $user->role_id = $request->role_id;
         $user->save();
         
-        // Send welcome email with password if requested
         if ($request->has('send_email')) {
             Mail::to($user->email)
                 ->send(new StaffAccountCreated($user, $password));
@@ -58,7 +56,7 @@ class StaffManagementController extends Controller
         
         return redirect()->route('admin.staff.index')
             ->with('success', 'Staff account created successfully')
-            ->with('password', $password); // This will be displayed once for the admin to see
+            ->with('password', $password); 
     }
     
     public function edit($id)
@@ -66,7 +64,6 @@ class StaffManagementController extends Controller
         $user = User::findOrFail($id);
         $roles = Role::whereIn('name', ['staff', 'admin'])->get();
         
-        // Prevent editing the last admin
         $isLastAdmin = $user->hasRole('admin') && User::role('admin')->count() <= 1;
         
         return view('admin.staff.edit', compact('user', 'roles', 'isLastAdmin'));
@@ -76,7 +73,6 @@ class StaffManagementController extends Controller
     {
         $user = User::findOrFail($id);
         
-        // Prevent editing the last admin
         if ($user->hasRole('admin') && User::role('admin')->count() <= 1 && $request->role_id != $user->role_id) {
             return redirect()->back()
                 ->with('error', 'Cannot change role of the last admin');
@@ -93,13 +89,11 @@ class StaffManagementController extends Controller
         $user->email = $request->email;
         $user->role_id = $request->role_id;
         
-        // Reset password if requested
         $password = null;
         if ($request->has('reset_password')) {
             $password = Str::random(10);
             $user->password = Hash::make($password);
             
-            // Send email with new password if requested
             if ($request->has('send_email')) {
                 Mail::to($user->email)
                     ->send(new StaffAccountCreated($user, $password, true));
@@ -110,20 +104,18 @@ class StaffManagementController extends Controller
         
         return redirect()->route('admin.staff.index')
             ->with('success', 'Staff account updated successfully')
-            ->with('password', $password); // This will be displayed once for the admin to see
+            ->with('password', $password);
     }
     
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         
-        // Prevent deleting the last admin
         if ($user->hasRole('admin') && User::role('admin')->count() <= 1) {
             return redirect()->back()
                 ->with('error', 'Cannot delete the last admin');
         }
         
-        // Check if staff has any scheduled test sessions
         if ($user->hasRole('staff') && $user->testSessions()->where('date', '>=', now())->count() > 0) {
             return redirect()->back()
                 ->with('error', 'Cannot delete staff with upcoming test sessions');
@@ -135,7 +127,6 @@ class StaffManagementController extends Controller
             ->with('success', 'Staff account deleted successfully');
     }
     
-    // Staff availability management
     public function availability($id)
     {
         $user = User::role('staff')->findOrFail($id);

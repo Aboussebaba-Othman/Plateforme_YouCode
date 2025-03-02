@@ -28,7 +28,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Relationships
     public function role()
     {
         return $this->belongsTo(Role::class);
@@ -39,7 +38,6 @@ class User extends Authenticatable
         return $this->hasOne(Candidate::class);
     }
 
-    // Role methods
     public function hasRole($roleName)
     {
         return $this->role && $this->role->name === $roleName;

@@ -17,7 +17,6 @@ class SettingsController extends Controller
     
     public function index()
     {
-        // Group settings by category
         $generalSettings = Setting::where('category', 'general')->get()->keyBy('key');
         $quizSettings = Setting::where('category', 'quiz')->get()->keyBy('key');
         $emailSettings = Setting::where('category', 'email')->get()->keyBy('key');
@@ -48,14 +47,12 @@ class SettingsController extends Controller
             }
         }
         
-        // Clear settings cache
         Cache::forget('app_settings');
         
         return redirect()->route('admin.settings')
             ->with('success', 'Settings updated successfully');
     }
     
-    // File Upload Management
     public function fileSettings()
     {
         $fileSettings = Setting::where('category', 'file')->get()->keyBy('key');
@@ -115,14 +112,12 @@ class SettingsController extends Controller
             );
         }
         
-        // Clear settings cache
         Cache::forget('app_settings');
         
         return redirect()->route('admin.settings.file')
             ->with('success', 'File settings updated successfully');
     }
     
-    // System Maintenance
     public function maintenance()
     {
         $appEnv = app()->environment();
@@ -190,7 +185,6 @@ class SettingsController extends Controller
             ->with('output', $output);
     }
     
-    // Toggle maintenance mode
     public function toggleMaintenanceMode(Request $request)
     {
         if (app()->isDownForMaintenance()) {

@@ -34,7 +34,7 @@ class QuizManagementController extends Controller
             'description' => 'required|string',
             'time_limit' => 'required|integer|min:1',
             'passing_score' => 'required|integer|min:1',
-            // 'is_active' => 'boolean'
+            'is_active' => 'boolean'
         ]);
         
         $quiz = new Quiz();
@@ -42,7 +42,7 @@ class QuizManagementController extends Controller
         $quiz->description = $request->description;
         $quiz->time_limit = $request->time_limit;
         $quiz->passing_score = $request->passing_score;
-        // $quiz->is_active = $request->has('is_active');
+        $quiz->is_active = $request->has('is_active');
         $quiz->save();
         
         return redirect()->route('admin.quiz.index')->with('success', 'Quiz created successfully');
@@ -63,14 +63,14 @@ class QuizManagementController extends Controller
             'description' => 'required|string',
             'time_limit' => 'required|integer|min:1',
             'passing_score' => 'required|integer|min:1',
-            // 'is_active' => 'boolean'
+            'is_active' => 'boolean'
         ]);
         
         $quiz->title = $request->title;
         $quiz->description = $request->description;
         $quiz->time_limit = $request->time_limit;
         $quiz->passing_score = $request->passing_score;
-        // $quiz->is_active = $request->has('is_active');
+        $quiz->is_active = $request->has('is_active');
         $quiz->save();
         
         return redirect()->back()->with('success', 'Quiz updated successfully');
@@ -80,12 +80,10 @@ class QuizManagementController extends Controller
     {
         $quiz = Quiz::findOrFail($id);
         
-        // Check if there are any attempts
         if ($quiz->attempts()->count() > 0) {
             return redirect()->back()->with('error', 'Cannot delete quiz with attempts');
         }
         
-        // Delete all questions and answers using DB transaction
         DB::transaction(function() use ($quiz) {
             foreach ($quiz->questions as $question) {
                 $question->answers()->delete();
@@ -97,7 +95,7 @@ class QuizManagementController extends Controller
         return redirect()->route('admin.quiz.index')->with('success', 'Quiz deleted successfully');
     }
     
-    // Question Management
+ 
     public function createQuestion($quizId)
     {
         $quiz = Quiz::findOrFail($quizId);
@@ -135,6 +133,14 @@ class QuizManagementController extends Controller
         
         return redirect()->back()->with('success', 'Question added successfully');
     }
+
+    public function editQuestion($quizId, $questionId)
+{
+    $quiz = Quiz::findOrFail($quizId);
+    $question = Question::findOrFail($questionId);
+    return view('admin.quiz.questions.edit', compact('quiz', 'question', 'quizId'));
+}
+    
     
     public function updateQuestion(Request $request, $quizId, $questionId)
     {
@@ -180,7 +186,6 @@ class QuizManagementController extends Controller
         return redirect()->back()->with('success', 'Question deleted successfully');
     }
     
-    // Quiz Statistics
     public function statistics($quizId)
     {
         $quiz = Quiz::findOrFail($quizId);
@@ -211,5 +216,11 @@ class QuizManagementController extends Controller
             });
         
         return view('admin.quiz.statistics', compact('quiz', 'totalAttempts', 'passedAttempts', 'failedAttempts', 'averageScore', 'questionStats'));
+    }
+
+    public function show($id)
+    {
+        $quiz = Quiz::with('questions.answers')->findOrFail($id);
+        return view('admin.quiz.show', compact('quiz'));
     }
 }

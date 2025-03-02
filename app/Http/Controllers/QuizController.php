@@ -22,9 +22,8 @@ class QuizController extends Controller
             ->with('error', 'Your documents must be approved before taking the quiz.');
     }
     
-    $quiz = Quiz::first(); // Assuming there's only one quiz for now
+    $quiz = Quiz::first(); 
     
-    // Check if the candidate has already attempted the quiz
     $candidate = Auth::user()->candidate;
     $attempts = $candidate->quizAttempts()
         ->where('quiz_id', $quiz->id)
@@ -42,7 +41,7 @@ class QuizController extends Controller
         }
     }
     
-    // Check if there's an ongoing attempt
+  
     $activeAttempt = $candidate->quizAttempts()
         ->where('quiz_id', $quiz->id)
         ->where('status', 'started')
@@ -61,7 +60,6 @@ public function startQuiz($quizId)
     $quiz = Quiz::findOrFail($quizId);
     $candidate = Auth::user()->candidate;
     
-    // Check if already attempted (passed or failed)
     $attempt = $candidate->quizAttempts()
         ->where('quiz_id', $quiz->id)
         ->whereIn('status', ['passed', 'failed'])
@@ -78,25 +76,25 @@ public function startQuiz($quizId)
         }
     }
     
-    // Check for existing active attempt
+    
     $attempt = $candidate->quizAttempts()
         ->where('quiz_id', $quiz->id)
         ->where('status', 'started')
         ->first();
         
-    // Create new attempt if none exists
+    
     if (!$attempt) {
         $attempt = new QuizAttempt([
             'candidate_id' => $candidate->id,
             'quiz_id' => $quiz->id,
             'started_at' => now(),
             'status' => 'started',
-            'current_question' => 0, // Start with the first question
+            'current_question' => 0, 
         ]);
         $attempt->save();
     }
     
-    // Check if time has expired
+  
     if ($attempt->isTimedOut()) {
         $attempt->update([
             'status' => 'failed',
@@ -185,14 +183,10 @@ public function startQuiz($quizId)
     public function showQuestion($attemptId)
 {
     $attempt = QuizAttempt::findOrFail($attemptId);
-    
-    // Verify this attempt belongs to the authenticated candidate
     if ($attempt->candidate_id !== Auth::user()->candidate->id) {
         abort(403, 'Unauthorized action.');
     }
-    
-    // Check if already completed
-    if ($attempt->status !== 'started') {
+        if ($attempt->status !== 'started') {
         if ($attempt->status === 'passed') {
             return redirect()->route('candidate.profile')
                 ->with('success', 'You have already passed the quiz!');
@@ -201,8 +195,6 @@ public function startQuiz($quizId)
                 ->with('error', 'You have failed the quiz and cannot retake it.');
         }
     }
-    
-    // Check if time has expired
     if ($attempt->isTimedOut()) {
         $attempt->update([
             'status' => 'failed',
@@ -215,8 +207,6 @@ public function startQuiz($quizId)
     
     $quiz = $attempt->quiz;
     $questions = $quiz->questions()->orderBy('id')->get();
-    
-    // Check if we've reached the end of the questions
     if ($attempt->current_question >= $questions->count()) {
         return $this->evaluateQuiz($attempt);
     }
@@ -230,17 +220,14 @@ public function answerQuestion(Request $request, $attemptId)
 {
     $attempt = QuizAttempt::findOrFail($attemptId);
     
-    // Verify this attempt belongs to the authenticated candidate
     if ($attempt->candidate_id !== Auth::user()->candidate->id) {
         abort(403, 'Unauthorized action.');
     }
     
-    // Check if already completed
     if ($attempt->status !== 'started') {
         return redirect()->route('candidate.quiz.results', $attempt->id);
     }
     
-    // Check if time has expired
     if ($attempt->isTimedOut()) {
         $attempt->update([
             'status' => 'failed',
@@ -252,34 +239,25 @@ public function answerQuestion(Request $request, $attemptId)
     }
     
     $quiz = $attempt->quiz;
-    $questions = $quiz->questions()->orderBy('id')->get();
-    
-    // Check if we've reached the end of the questions
-    if ($attempt->current_question >= $questions->count()) {
+    $questions = $quiz->questions()->orderBy('id')->get();    if ($attempt->current_question >= $questions->count()) {
         return $this->evaluateQuiz($attempt);
     }
     
     $question = $questions[$attempt->current_question];
     $questionId = $question->id;
     
-    // Get the answer
     $answerId = $request->input('answer');
     
     if (!$answerId) {
         return redirect()->back()->with('error', 'Please select an answer.');
     }
     
-    // Save the answer
     $answers = $attempt->answers ?? [];
     $answers[$questionId] = $answerId;
     $attempt->answers = $answers;
-    
-    // Move to the next question
-    $attempt->current_question = $attempt->current_question + 1;
+        $attempt->current_question = $attempt->current_question + 1;
     $attempt->save();
-    
-    // Check if that was the last question
-    if ($attempt->current_question >= $questions->count()) {
+        if ($attempt->current_question >= $questions->count()) {
         return $this->evaluateQuiz($attempt);
     }
     
@@ -315,7 +293,6 @@ private function evaluateQuiz($attempt)
         'completed_at' => now(),
     ]);
     
-    // Update candidate status if passed
     if ($passed) {
         $candidate = Auth::user()->candidate;
         $candidate->update(['status' => 'quiz_passed']);

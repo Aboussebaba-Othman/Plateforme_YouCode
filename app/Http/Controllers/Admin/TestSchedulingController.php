@@ -69,7 +69,6 @@ class TestSchedulingController extends Controller
         $session = TestSession::findOrFail($id);
         $staff = User::role('staff')->get();
         
-        // Check if there are any appointments
         $hasAppointments = $session->appointments()->count() > 0;
         
         return view('admin.test.edit_session', compact('session', 'staff', 'hasAppointments'));
@@ -104,7 +103,6 @@ class TestSchedulingController extends Controller
     {
         $session = TestSession::findOrFail($id);
         
-        // Check if there are any appointments
         if ($session->appointments()->count() > 0) {
             return redirect()->back()
                 ->with('error', 'Cannot delete session with existing appointments');
@@ -116,17 +114,14 @@ class TestSchedulingController extends Controller
             ->with('success', 'Test session deleted successfully');
     }
     
-    // Schedule candidates for tests
     public function scheduleCandidates()
     {
-        // Get candidates who passed the quiz but don't have a test scheduled
         $eligibleCandidates = Candidate::with('user')
             ->where('status', 'quiz_passed')
             ->whereDoesntHave('testAppointment')
             ->latest()
             ->paginate(10);
             
-        // Get upcoming test sessions with available capacity
         $availableSessions = TestSession::where('date', '>=', now())
             ->whereRaw('capacity > (SELECT COUNT(*) FROM test_appointments WHERE test_session_id = test_sessions.id)')
             ->orderBy('date')
@@ -146,31 +141,26 @@ class TestSchedulingController extends Controller
         $candidate = Candidate::findOrFail($request->candidate_id);
         $session = TestSession::findOrFail($request->session_id);
         
-        // Check if candidate already has an appointment
         if ($candidate->testAppointment) {
             return redirect()->back()
                 ->with('error', 'Candidate already has a test appointment');
         }
         
-        // Check if session has available capacity
         $currentAppointments = $session->appointments()->count();
         if ($currentAppointments >= $session->capacity) {
             return redirect()->back()
                 ->with('error', 'Selected session is full');
         }
         
-        // Create the appointment
         $appointment = new TestAppointment();
         $appointment->candidate_id = $candidate->id;
         $appointment->test_session_id = $session->id;
         $appointment->status = 'scheduled';
         $appointment->save();
         
-        // Update candidate status
         $candidate->status = 'test_scheduled';
         $candidate->save();
         
-        // Send confirmation email
         Mail::to($candidate->user->email)
             ->send(new TestAppointmentConfirmation($appointment));
         
@@ -178,7 +168,6 @@ class TestSchedulingController extends Controller
             ->with('success', 'Test scheduled successfully and confirmation email sent');
     }
     
-    // View session details with all appointments
     public function viewSession($id)
     {
         $session = TestSession::with(['appointments.candidate.user', 'staff'])
@@ -187,7 +176,6 @@ class TestSchedulingController extends Controller
         return view('admin.test.view_session', compact('session'));
     }
     
-    // Record test results
     public function recordResults($appointmentId)
     {
         $appointment = TestAppointment::with(['candidate.user', 'session'])
@@ -215,7 +203,6 @@ class TestSchedulingController extends Controller
         $appointment->completed_at = now();
         $appointment->save();
         
-        // Update candidate status if needed
         if ($request->status === 'passed') {
             $appointment->candidate->status = 'test_passed';
             $appointment->candidate->save();

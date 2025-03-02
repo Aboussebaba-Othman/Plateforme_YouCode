@@ -16,7 +16,6 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        // Get statistics for dashboard
         $stats = [
             'total_candidates' => Candidate::count(),
             'pending_documents' => Candidate::where('status', 'documents_submitted')->count(),

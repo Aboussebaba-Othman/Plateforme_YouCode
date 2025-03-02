@@ -19,7 +19,7 @@ class CandidateInfoRequest extends FormRequest
             'date_of_birth' => 'required|date|before:today',
             'phone' => 'required|string|max:20',
             'address' => 'required|string|max:500',
-            'id_card' => 'required|file|mimes:jpeg,png,pdf|max:5120', // 5MB max
+            'id_card' => 'required|file|mimes:jpeg,png,pdf|max:5120', 
         ];
     }
 }

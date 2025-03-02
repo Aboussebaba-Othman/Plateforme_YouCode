@@ -44,7 +44,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
     Route::get('/candidates/{id}', [AdminController::class, 'viewCandidate'])->name('admin.candidate.view');
     Route::post('/candidates/{id}/status', [AdminController::class, 'updateCandidateStatus'])->name('admin.candidate.update.status');
 
-    // Quiz Management Routes
     Route::prefix('quiz')->name('admin.quiz.')->group(function () {
         Route::get('/', [QuizManagementController::class, 'index'])->name('index');
         Route::get('/create', [QuizManagementController::class, 'create'])->name('create');
@@ -53,11 +52,13 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
         Route::put('/{id}', [QuizManagementController::class, 'update'])->name('update');
         Route::delete('/{id}', [QuizManagementController::class, 'destroy'])->name('destroy');
         
-        // Question Management
         Route::get('/{quizId}/questions/create', [QuizManagementController::class, 'createQuestion'])->name('question.create');
         Route::post('/{quizId}/questions', [QuizManagementController::class, 'storeQuestion'])->name('question.store');
         Route::get('/{quizId}/questions/{questionId}/edit', [QuizManagementController::class, 'editQuestion'])->name('question.edit');
         Route::put('/{quizId}/questions/{questionId}', [QuizManagementController::class, 'updateQuestion'])->name('question.update');
         Route::delete('/{quizId}/questions/{questionId}', [QuizManagementController::class, 'destroyQuestion'])->name('question.destroy');
+        Route::get('/{id}', [QuizManagementController::class, 'show'])->name('show');
+
+
     });
 });
