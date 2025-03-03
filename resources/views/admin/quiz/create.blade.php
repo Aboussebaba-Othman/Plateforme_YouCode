@@ -78,8 +78,8 @@
                             </div>
                             
                             <div class="form-check mt-3 mb-4">
-                                <input type="checkbox" class="form-check-input" id="is_published" name="is_published">
-                                <label class="form-check-label" for="is_published">Publier immédiatement ce quiz</label>
+                                <input type="checkbox" class="form-check-input" id="is_active" name="is_active">
+                                <label class="form-check-label" for="is_active">Publier immédiatement ce quiz</label>
                             </div>
                             
                             <div class="d-flex justify-content-end mt-4">

@@ -95,7 +95,6 @@ class QuizManagementController extends Controller
         return redirect()->route('admin.quiz.index')->with('success', 'Quiz deleted successfully');
     }
     
- 
     public function createQuestion($quizId)
     {
         $quiz = Quiz::findOrFail($quizId);
@@ -135,12 +134,11 @@ class QuizManagementController extends Controller
     }
 
     public function editQuestion($quizId, $questionId)
-{
-    $quiz = Quiz::findOrFail($quizId);
-    $question = Question::findOrFail($questionId);
-    return view('admin.quiz.questions.edit', compact('quiz', 'question', 'quizId'));
-}
-    
+    {
+        $quiz = Quiz::findOrFail($quizId);
+        $question = Question::findOrFail($questionId);
+        return view('admin.quiz.questions.edit', compact('quiz', 'question', 'quizId'));
+    }
     
     public function updateQuestion(Request $request, $quizId, $questionId)
     {

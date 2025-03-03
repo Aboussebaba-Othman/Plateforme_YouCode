@@ -110,6 +110,7 @@
             background-color: rgba(78, 115, 223, 0.2);
         }
     </style>
+    
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
