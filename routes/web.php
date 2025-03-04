@@ -7,12 +7,38 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Admin\QuizManagementController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+
+Route::get('/email/verify', function () {
+    return view('auth.verify');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/home')->with('success', 'Email verified successfully!');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('resent', true);
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+
+Route::get('/test-email', function () {
+    Mail::raw('Test email from Laravel app', function ($message) {
+        $message->to(auth()->user()->email)
+            ->subject('Test Email');
+    });
+    
+    return 'Test email sent to ' . auth()->user()->email;
+})->middleware('auth')->name('test.email');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -58,7 +84,5 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->group(fu
         Route::put('/{quizId}/questions/{questionId}', [QuizManagementController::class, 'updateQuestion'])->name('question.update');
         Route::delete('/{quizId}/questions/{questionId}', [QuizManagementController::class, 'destroyQuestion'])->name('question.destroy');
         Route::get('/{id}', [QuizManagementController::class, 'show'])->name('show');
-
-
     });
 });
