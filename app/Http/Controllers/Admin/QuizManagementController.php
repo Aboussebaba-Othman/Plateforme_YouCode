@@ -63,7 +63,7 @@ class QuizManagementController extends Controller
             'description' => 'required|string',
             'time_limit' => 'required|integer|min:1',
             'passing_score' => 'required|integer|min:1',
-            'is_active' => 'boolean'
+            // 'is_active' => 'boolean'
         ]);
         
         $quiz->title = $request->title;
@@ -73,8 +73,7 @@ class QuizManagementController extends Controller
         $quiz->is_active = $request->has('is_active');
         $quiz->save();
         
-        return redirect()->back()->with('success', 'Quiz updated successfully');
-    }
+        return redirect()->route('admin.quiz.index')->with('success', 'Quiz updated successfully');    }
     
     public function destroy($id)
     {

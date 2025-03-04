@@ -15,8 +15,12 @@ class Quiz extends Model
         'description',
         'time_limit',
         'passing_score',
+        'is_active',
     ];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
     public function questions()
     {
         return $this->hasMany(Question::class);
