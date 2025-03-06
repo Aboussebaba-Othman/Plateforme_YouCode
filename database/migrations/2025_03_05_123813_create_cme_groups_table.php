@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCmeGroupsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('cme_groups', function (Blueprint $table) {
@@ -22,17 +17,12 @@ class CreateCmeGroupsTable extends Migration
             $table->timestamps();
         });
 
-        // Add cme_group_id to interviews table
         Schema::table('interviews', function (Blueprint $table) {
             $table->foreignId('cme_group_id')->nullable()->constrained()->onDelete('set null');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
+   
     public function down()
     {
         Schema::table('interviews', function (Blueprint $table) {
