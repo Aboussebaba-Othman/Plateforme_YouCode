@@ -217,17 +217,11 @@ class CmeGroupController extends Controller
         return redirect()->route('admin.cme.index')->with('success', 'Groupe CME mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified CME group from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         $group = CmeGroup::findOrFail($id);
         
-        // This will also delete associated interviews due to cascade
         $group->delete();
         
         return redirect()->route('admin.cme.index')->with('success', 'Groupe CME supprimé avec succès.');
