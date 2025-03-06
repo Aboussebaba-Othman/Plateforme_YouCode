@@ -21,26 +21,20 @@ class CmeGroup extends Model
         'session_date' => 'date',
     ];
 
-    /**
-     * Get the interviews associated with this CME group.
-     */
+    
     public function interviews()
     {
         return $this->hasMany(Interview::class, 'cme_group_id');
     }
 
-    /**
-     * Get the staff member in charge of this CME group.
-     */
+    
     public function staff()
     {
         return $this->belongsTo(User::class, 'staff_id');
     }
     
 
-    /**
-     * Get the candidates in this CME group through interviews.
-     */
+    
     public function candidates()
     {
         return $this->hasManyThrough(
@@ -53,41 +47,31 @@ class CmeGroup extends Model
         );
     }
     
-    /**
-     * Get formatted session time (Morning/Afternoon)
-     */
+    
     public function getFormattedSessionTimeAttribute()
     {
         return $this->session_time === 'morning' ? 'Matin (9h-12h)' : 'Après-midi (14h-17h)';
     }
     
-    /**
-     * Get formatted session date
-     */
+    
     public function getFormattedDateAttribute()
     {
         return Carbon::parse($this->session_date)->locale('fr')->isoFormat('dddd D MMMM YYYY');
     }
     
-    /**
-     * Get the number of candidates in this group
-     */
+    
     public function getCandidateCountAttribute()
     {
         return $this->interviews->count();
     }
     
-    /**
-     * Check if this group is full (4 candidates)
-     */
+    
     public function getIsFullAttribute()
     {
         return $this->interviews->count() >= 4;
     }
     
-    /**
-     * Get session status (upcoming, in_progress, completed)
-     */
+    
     public function getStatusAttribute()
     {
         $today = Carbon::today();
@@ -101,9 +85,7 @@ class CmeGroup extends Model
         }
     }
     
-    /**
-     * Get colored status badge
-     */
+    
     public function getStatusBadgeAttribute()
     {
         $status = $this->status;
