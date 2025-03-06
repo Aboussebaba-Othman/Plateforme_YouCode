@@ -133,7 +133,7 @@
             </div>
             @else
             <div class="p-4 text-center">
-                <p class="text-muted mb-0">Aucun groupe CME passé.</p>
+                <p class="text-muted mb-0">Aucun groupe CME.</p>
             </div>
             @endif
         </div>

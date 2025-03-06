@@ -45,7 +45,7 @@
                         <div class="mb-3">
                             <label for="staff_id" class="form-label">Examinateur</label>
                             <select class="form-select" id="staff_id" name="staff_id" required>
-                                <option value="">Sélectionner un examinateur</option>
+                                <option value="">Sélectionner un staff</option>
                                 @foreach($staffMembers as $staff)
                                 <option value="{{ $staff->id }}" {{ old('staff_id', $group->staff_id) == $staff->id ? 'selected' : '' }}>
                                     {{ $staff->name }}

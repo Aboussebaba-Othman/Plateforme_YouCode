@@ -135,7 +135,7 @@
                     </div>
                     @else
                     <div class="p-4 text-center">
-                        <p class="text-muted mb-0">Aucun candidat assigné à ce groupe.</p>
+                        <p class="text-muted mb-0">Aucun candidat assigné.</p>
                     </div>
                     @endif
                 </div>
