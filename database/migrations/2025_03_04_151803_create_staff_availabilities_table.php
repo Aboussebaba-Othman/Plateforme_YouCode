@@ -1,10 +1,11 @@
+php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateStaffAvailabilitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,21 +13,19 @@ return new class extends Migration
      * @return void
      */
     public function up()
-{
-    Schema::create('interviews', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');  // The candidate
-        $table->foreignId('staff_id')->constrained('users')->onDelete('cascade');  // The examiner
-        $table->date('date');
-        $table->time('start_time');
-        $table->time('end_time');
-        $table->string('location');
-        $table->string('type')->default('technical');  // technical, administrative, CME
-        $table->string('status')->default('scheduled');  // scheduled, completed, cancelled
-        $table->text('notes')->nullable();
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('staff_availabilities', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('day_of_week', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->boolean('is_available')->default(true);
+            $table->timestamps();
+            
+            $table->unique(['user_id', 'day_of_week']);
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -37,4 +36,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('staff_availabilities');
     }
-};
+}

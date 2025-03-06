@@ -15,8 +15,8 @@ class QuizSeeder extends Seeder
         $quiz = Quiz::create([
             'title' => 'Assessment Quiz',
             'description' => 'This quiz will test your knowledge and skills. You must pass to proceed to the next stage.',
-            'time_limit' => 30, // 30 minutes
-            'passing_score' => 7, // Pass with 7 points
+            'time_limit' => 30, 
+            'passing_score' => 7, 
         ]);
         
         // Question 1

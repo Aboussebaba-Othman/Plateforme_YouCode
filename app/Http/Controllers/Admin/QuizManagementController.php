@@ -63,7 +63,7 @@ class QuizManagementController extends Controller
             'description' => 'required|string',
             'time_limit' => 'required|integer|min:1',
             'passing_score' => 'required|integer|min:1',
-            // 'is_active' => 'boolean'
+            'is_active' => 'boolean'
         ]);
         
         $quiz->title = $request->title;
@@ -218,6 +218,6 @@ class QuizManagementController extends Controller
     public function show($id)
     {
         $quiz = Quiz::with('questions.answers')->findOrFail($id);
-        return view('admin.quiz.show', compact('quiz'));
+        return view('admin.quiz.edit', compact('quiz'));
     }
 }

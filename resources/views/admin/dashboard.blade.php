@@ -10,13 +10,13 @@
                 </div>
                 <div class="card-body">
                     @if (session('success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
-                        </div>
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
                     @endif
 
                     <h3>Welcome, Admin!</h3>
-                    
+
                     <div class="row mt-4">
                         <div class="col-md-4 mb-4">
                             <div class="card bg-primary text-white shadow-sm">
@@ -74,6 +74,25 @@
                             </a>
                             <a href="{{ route('admin.dashboard') }}" class="btn btn-info">
                                 <i class="fas fa-chart-line me-1"></i> View Statistics
+                            </a>
+                            <a href="{{ route('admin.interviews.index') }}" class="btn btn-warning">
+                                <i class="fas fa-calendar-alt me-1"></i> Gérer les Entretiens
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Ajout de la section CME et Feedback -->
+                    <div class="mt-4">
+                        <h4>Gestion des entretiens</h4>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="{{ route('admin.interviews.index') }}" class="btn btn-warning">
+                                <i class="fas fa-calendar-alt me-1"></i> Tous les Entretiens
+                            </a>
+                            <a href="{{ route('admin.cme.index') }}" class="btn btn-info">
+                                <i class="fas fa-users-class me-1"></i> Groupes CME
+                            </a>
+                            <a href="{{ route('admin.interviews.create') }}" class="btn btn-success">
+                                <i class="fas fa-calendar-plus me-1"></i> Planifier un Entretien
                             </a>
                         </div>
                     </div>

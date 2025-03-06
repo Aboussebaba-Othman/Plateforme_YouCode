@@ -14,9 +14,12 @@ return new class extends Migration
     public function up()
 {
     Schema::table('quiz_attempts', function (Blueprint $table) {
-        $table->integer('current_question')->default(0)->after('answers');
+        if (!Schema::hasColumn('quiz_attempts', 'current_question')) {
+            $table->integer('current_question')->default(0);
+        }
     });
 }
+
 
 public function down()
 {
